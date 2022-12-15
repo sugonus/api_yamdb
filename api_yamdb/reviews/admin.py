@@ -16,10 +16,21 @@ class TitleAdmin(admin.ModelAdmin):
     inlines = [GenreTitleInline]
 
 
-class GenreAdmin(admin.ModelAdmin):
+class GenreResource(resources.ModelResource):
+    class Meta:
+        model = Genre
+        fields = (
+            'id',
+            'name',
+            'slug',
+        )
+
+
+class GenreAdmin(ImportExportModelAdmin):
+    resource_classes = [GenreResource]
     list_display = ('name', 'slug',)
-    search_fields = ('name',)
-    list_filter = ('id',)
+    # search_fields = ('name',)
+    # list_filter = ('id',)
 
 
 class CategoryAdmin(admin.ModelAdmin):
