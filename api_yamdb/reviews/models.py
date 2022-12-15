@@ -36,4 +36,3 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
-    
