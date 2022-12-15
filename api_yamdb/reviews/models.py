@@ -29,12 +29,12 @@ class Title(models.Model):
         verbose_name='Категория',
         null=True,
     )
-    genre = models.ManyToManyField(
+    genres = models.ManyToManyField(
         Genre,
-        # through='GenreTitle',
-        related_name='genres',
-        verbose_name='Жанры',
-        blank=True
+        through='GenreTitle',
+        related_name='titles',
+        # verbose_name='Жанры',
+        # blank=True
     )
     year = models.IntegerField(
         verbose_name='Год выхода',
@@ -45,9 +45,9 @@ class Title(models.Model):
         return self.name
 
 
-# class GenreTitle(models.Model):
-#     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-#     title = models.ForeignKey(Title, on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return f'{self.title} {self.genre}'
+class GenreTitle(models.Model):
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.title} {self.genre}'

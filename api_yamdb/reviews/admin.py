@@ -11,16 +11,14 @@ admin.site.register(Genre)
 
 
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'genre', 'year', 'rating')
+    list_display = ('id', 'name', 'category', 'genre', 'year', 'rating')
     search_fields = ('name',)
     list_filter = ('rating',)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
+    list_display = ('id', 'name', 'slug')
 
 
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-
-
+    list_display = ('id', 'name', 'slug')
