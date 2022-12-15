@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'import_export',
 ]
 
+# AUTH_USER_MODEL = 'reviews.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

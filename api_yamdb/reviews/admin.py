@@ -1,24 +1,55 @@
 from django.contrib import admin
 from import_export import resources
-from import_export.fields import Field
 from import_export.admin import ImportExportModelAdmin
 
-from .models import Title, Category, Genre
+from .models import Title, Category, Genre, User
 
-admin.site.register(Title)
-admin.site.register(Category)
-admin.site.register(Genre)
+
+class GenreTitleInline(admin.TabularInline):
+    model = Title.genres.through
 
 
 class TitleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'genre', 'year', 'rating')
+    list_display = ('name', 'year', 'description', 'category',)
     search_fields = ('name',)
-    list_filter = ('rating',)
-
-
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug')
+    list_filter = ('id',)
+    inlines = [GenreTitleInline]
 
 
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug')
+    list_display = ('name', 'slug',)
+    search_fields = ('name',)
+    list_filter = ('id',)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug',)
+    search_fields = ('name',)
+    list_filter = ('id',)
+
+
+admin.site.register(Title, TitleAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Category, CategoryAdmin)
+
+
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'email',
+            'role',
+            'bio',
+        )
+
+
+# @admin.register(User)
+class UserAdmin(ImportExportModelAdmin):
+    resource_classes = [UserResource]
+    list_display = (
+        'id',
+        'username',
+        'email',
+    )
