@@ -36,8 +36,8 @@ class Title(models.Model):
         Genre,
         through='GenreTitle',
         related_name='titles',
-        # verbose_name='Жанры',
-        # blank=True
+        verbose_name='Жанры',
+        blank=True
     )
     year = models.IntegerField(
         verbose_name='Год выхода',
@@ -49,8 +49,8 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    title = models.ForeignKey(Title, on_delete=models.CASCADE)
+    genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE, db_column='genre_id')
+    title_id = models.ForeignKey(Title, on_delete=models.CASCADE, db_column='title_id')
 
     def __str__(self):
-        return f'{self.title} {self.genre}'
+        return f'{self.title_id} {self.genre_id}'
