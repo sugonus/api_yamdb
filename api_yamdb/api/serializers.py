@@ -21,8 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username',
-                  'email')
+        fields = ('username', 'email')
 
     def validate(self, data):
         if data.get('username') != 'me':
@@ -67,3 +66,18 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = ('id', 'category', 'genres', 'name', 'year', 'description')
+
+
+class ReadOnlyTitleSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField(
+        source='reviews__score__avg', read_only=True
+    )
+    genres = GenreSerializer(read_only=True, many=True)
+    category = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Title
+        fields = (
+            'id', 'name', 'year', 'rating', 'description', 'genre', 'category'
+        )
+

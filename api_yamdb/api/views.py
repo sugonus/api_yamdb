@@ -1,22 +1,26 @@
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.shortcuts import get_object_or_404
-from .serializers import (RegistrationSerializer,
-                          AuthTokenSerializer,
-                          UserSerializer)
-from .utils import confirmation_generator
-from reviews.models import User
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
-from reviews.models import Title, Category, Genre
-from .serializers import TitleSerializer, CategorySerializer, GenreSerializer
+from django.shortcuts import get_object_or_404
+
+from .utils import confirmation_generator
+from reviews.models import Title, Category, Genre, User
 from .permissions import IsAdminOrReadOnly
 from .mixins import MixinSet
+from .serializers import (RegistrationSerializer,
+                          AuthTokenSerializer,
+                          UserSerializer,
+                          TitleSerializer,
+                          ReadOnlyTitleSerializer,
+                          CategorySerializer,
+                          GenreSerializer)
 
 
 class UserRegistrationView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
 
@@ -36,6 +40,8 @@ class UserRegistrationView(APIView):
 
 
 class AuthTokenView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request):
         serializer = AuthTokenSerializer(data=request.data)
 
@@ -72,6 +78,11 @@ class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
+
+    def get_serializer_class(self):
+        if self.action in ("retrieve", "list"):
+            return ReadOnlyTitleSerializer
+        return TitleSerializer
 
 
 class CategoryViewSet(MixinSet):

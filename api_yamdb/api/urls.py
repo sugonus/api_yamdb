@@ -6,7 +6,8 @@ from .views import (UserRegistrationView,
                     UserViewSet,
                     TitleViewSet,
                     CategoryViewSet,
-                    GenreViewSet)
+                    GenreViewSet,
+                    )
 
 app_name = 'api'
 
