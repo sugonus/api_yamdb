@@ -90,7 +90,6 @@ class UserResource(resources.ModelResource):
         )
 
 
-# @admin.register(User)
 class UserAdmin(ImportExportModelAdmin):
     resource_classes = [UserResource]
     list_display = (
@@ -107,4 +106,4 @@ admin.site.register(GenreTitle, GenreTitleAdmin)
 
 # admin.site.register(Comments, CommentsAdmin)
 # admin.site.register(review, ReviewAdmin)
-# admin.site.register(User, UserAdmin)
+admin.site.register(User, UserAdmin)

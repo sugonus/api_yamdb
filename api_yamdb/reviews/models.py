@@ -1,9 +1,43 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 
 from .validators import validate_year
 
-User = get_user_model()
+
+class User(AbstractUser):
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
+
+    ROLES = (
+        (USER, 'Пользователь'),
+        (MODERATOR, 'Модератор'),
+        (ADMIN, 'Администратор')
+    )
+
+    bio = models.TextField(
+        'Биография',
+        blank=True
+    )
+
+    role = models.CharField(
+        'Роль',
+        max_length=10,
+        choices=ROLES,
+        default=USER
+    )
+
+    email = models.CharField(
+        'Email',
+        max_length=254,
+    )
+
+    confirmation_code = models.CharField(
+        'Код',
+        max_length=15,
+        blank=True,
+        null=True
+    )
 
 
 class Category(models.Model):
@@ -49,8 +83,10 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE, db_column='genre_id')
-    title_id = models.ForeignKey(Title, on_delete=models.CASCADE, db_column='title_id')
+    genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE,
+                                 db_column='genre_id')
+    title_id = models.ForeignKey(Title, on_delete=models.CASCADE,
+                                 db_column='title_id')
 
     def __str__(self):
         return f'{self.title_id} {self.genre_id}'
