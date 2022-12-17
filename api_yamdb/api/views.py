@@ -15,6 +15,7 @@ from .serializers import (CommentSerializer, ReviewSerializer,
                           RegistrationSerializer,
                           AuthTokenSerializer, UserSerializer,
                           TitleSerializer,
+                          # TitleWriteSerializer, ReadOnlyTitleSerializer,
                           CategorySerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly, IsAdmin,
@@ -107,10 +108,10 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
 
-    def get_serializer_class(self):
-        if self.action in ("retrieve", "list"):
-            return TitleSerializer
-        return TitleSerializer
+    # def get_serializer_class(self):
+    #     if self.action in ("retrieve", "list"):
+    #         return TitleSerializer
+    #     return TitleSerializer
 
 
 class CategoryViewSet(MixinSet):
