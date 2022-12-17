@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from re import match
 from reviews.models import User, Title, Category, Genre
 
 
@@ -21,15 +21,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email')
 
-    def validate(self, data):
-        if data.get('username') != 'me':
-            return data
-        raise serializers.ValidationError(
-            'Выберите другое имя.'
-        )
+    def validate_username(self, value):
+        if value != 'me' and match(r'[\w]', value):
+            return value
+        raise serializers.ValidationError('Некорректный username')
+
+    def validate_email(self, value):
+        if match(r'[\w]+@[\w]+\.[\w]+', value):
+            return value
+        raise serializers.ValidationError('Некорректный email')
 
 
 class AuthTokenSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=50)
+    confirmation_code = serializers.CharField(max_length=15)
 
     class Meta:
         model = User

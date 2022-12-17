@@ -70,15 +70,16 @@ class AuthTokenView(APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAdmin,)
-    lookup_field = "username"
+    lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
-    search_fields = ("=username",)
+    search_fields = ('=username',)
 
     @action(
-        methods=["GET", "PATCH"],
+        methods=['GET', 'PATCH'],
         detail=False,
         permission_classes=[permissions.IsAuthenticated],
     )
@@ -88,11 +89,14 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        serializer = self.get_serializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
+        if request.method == "PATCH":
+            serializer = self.get_serializer(user,
+                                             data=request.data,
+                                             partial=True)
+            serializer.is_valid(raise_exception=True)
 
-        serializer.save(role=user.role, partial=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer.save(role=user.role, partial=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
