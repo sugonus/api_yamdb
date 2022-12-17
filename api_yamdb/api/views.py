@@ -3,10 +3,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Avg
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from .utils import confirmation_generator
+# from .filters import TitleFilter
 from reviews.models import User, Title, Category, Genre, Review
 from .mixins import MixinSet
 from .serializers import (CommentSerializer, ReviewSerializer,
@@ -14,10 +16,11 @@ from .serializers import (CommentSerializer, ReviewSerializer,
                           AuthTokenSerializer, UserSerializer,
                           TitleSerializer,
                           ReadOnlyTitleSerializer,
+                          TitleWriteSerializer,
                           CategorySerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly, IsAdmin,
-                          IsAdminModeratorOwnerOrReadOnly)
+                          IsAdminModeratorOwnerOrReadOnly, IsAdminUserOrReadOnly)
 
 
 class UserRegistrationView(APIView):
@@ -106,8 +109,24 @@ class TitleViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ("retrieve", "list"):
-            return ReadOnlyTitleSerializer
+            return TitleSerializer
         return TitleSerializer
+
+
+    # """
+    # Получить список всех объектов. Права доступа: Доступно без токена
+    # """
+    # queryset = Title.objects.annotate(
+    #     rating=Avg('reviews__score')
+    # ).all()
+    # permission_classes = (IsAdminOrReadOnly,)
+    # filter_backends = (DjangoFilterBackend, )
+    # filterset_class = TitleFilter
+
+    # def get_serializer_class(self):
+    #     if self.action in ('list', 'retrieve'):
+    #         return TitleSerializer
+    #     return TitleWriteSerializer
 
 
 class CategoryViewSet(MixinSet):
@@ -122,7 +141,10 @@ class CategoryViewSet(MixinSet):
 class GenreViewSet(MixinSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
