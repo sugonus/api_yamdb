@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from .validators import validate_year, validate_len_150
+from .validators import validate_year
 
 
 class User(AbstractUser):
@@ -14,10 +14,6 @@ class User(AbstractUser):
         (MODERATOR, 'Модератор'),
         (ADMIN, 'Администратор')
     )
-
-    username = models.CharField(max_length=150,
-                                unique=True,
-                                validators=(validate_len_150,))
 
     bio = models.TextField(
         'Биография',
