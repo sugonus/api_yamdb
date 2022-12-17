@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Avg
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -17,7 +18,8 @@ from .serializers import (CommentSerializer, ReviewSerializer,
                           CategorySerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly, IsAdmin,
-                          IsAdminModeratorOwnerOrReadOnly)
+                          IsAdminModeratorOwnerOrReadOnly, 
+                          IsAdminUserOrReadOnly)
 
 
 class UserRegistrationView(APIView):
@@ -71,12 +73,13 @@ class AuthTokenView(APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAdmin,)
-    lookup_field = "username"
+    lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
-    search_fields = ("=username",)
+    search_fields = ('=username',)
 
     @action(
         methods=["GET", "PATCH"],
@@ -122,7 +125,10 @@ class CategoryViewSet(MixinSet):
 class GenreViewSet(MixinSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
+    lookup_field = 'slug'
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
