@@ -1,6 +1,8 @@
+import os
+
 from pathlib import Path
 from datetime import timedelta
-import os
+from django.conf.global_settings import DATETIME_INPUT_FORMATS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -134,5 +136,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'reviews.User'
+
+DATETIME_INPUT_FORMATS += ('%Y-%m-%dT%H:%M:%S.567z',
+                           '%Y-%m-%dT%H:%M:%S.422z',
+                           )
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)

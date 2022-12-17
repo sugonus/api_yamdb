@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import Title, Category, Genre, User, GenreTitle
+from .models import Title, Category, Genre, User, GenreTitle, Review, Comment
 
 
 class GenreTitleInline(admin.TabularInline):
@@ -99,11 +99,49 @@ class UserAdmin(ImportExportModelAdmin):
     )
 
 
+class ReviewResource(resources.ModelResource):
+    class Meta:
+        model = Review
+        fields = (
+            'id',
+            'title_id',
+            'text',
+            'author',
+            'score',
+            'pub_date',
+        )
+
+
+class ReviewAdmin(ImportExportModelAdmin):
+    resource_classes = [ReviewResource]
+    list_display = ('id', 'author', 'text', 'score',)
+    search_fields = ('author',)
+    list_filter = ('id',)
+
+
+class CommentResource(resources.ModelResource):
+    class Meta:
+        model = Comment
+        fields = (
+            'id',
+            'review_id',
+            'text',
+            'author',
+            'pub_date',
+        )
+
+
+class CommentAdmin(ImportExportModelAdmin):
+    resource_classes = [CommentResource]
+    list_display = ('id', 'author', 'text',)
+    search_fields = ('author',)
+    list_filter = ('id',)
+
+
 admin.site.register(Title, TitleAdmin)
 admin.site.register(Genre, GenreAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(GenreTitle, GenreTitleAdmin)
-
-# admin.site.register(Comments, CommentsAdmin)
-# admin.site.register(review, ReviewAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(User, UserAdmin)
