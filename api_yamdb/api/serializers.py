@@ -4,20 +4,18 @@ from reviews.models import User, Title, Category, Genre
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=150)
 
     class Meta:
         model = User
         fields = ('username',
+                  'email',
                   'first_name',
                   'last_name',
-                  'email',
                   'bio',
                   'role')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=150)
 
     class Meta:
         model = User
@@ -32,7 +30,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class AuthTokenSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=150)
 
     class Meta:
         model = User
@@ -80,4 +77,3 @@ class ReadOnlyTitleSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name', 'year', 'rating', 'description', 'genre', 'category'
         )
-

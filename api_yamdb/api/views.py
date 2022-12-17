@@ -1,13 +1,14 @@
-from rest_framework import status, viewsets, permissions
+from rest_framework import status, viewsets, permissions, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 
 from .utils import confirmation_generator
 from reviews.models import Title, Category, Genre, User
-from .permissions import IsAdminOrReadOnly
+from .permissions import IsAdminOrReadOnly, IsAdmin
 from .mixins import MixinSet
 from .serializers import (RegistrationSerializer,
                           AuthTokenSerializer,
@@ -71,6 +72,27 @@ class AuthTokenView(APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsAdmin,)
+    lookup_field = "username"
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ("=username",)
+
+    @action(
+        methods=["GET", "PATCH"],
+        detail=False,
+        permission_classes=[permissions.IsAuthenticated],
+    )
+    def me(self, request):
+        user = request.user
+        if request.method == 'GET':
+            serializer = self.get_serializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(role=user.role, partial=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TitleViewSet(viewsets.ModelViewSet):

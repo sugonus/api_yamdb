@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from .validators import validate_year
+from .validators import validate_year, validate_len_150
 
 
 class User(AbstractUser):
@@ -14,6 +14,10 @@ class User(AbstractUser):
         (MODERATOR, 'Модератор'),
         (ADMIN, 'Администратор')
     )
+
+    username = models.CharField(max_length=150,
+                                unique=True,
+                                validators=(validate_len_150,))
 
     bio = models.TextField(
         'Биография',
@@ -30,6 +34,7 @@ class User(AbstractUser):
     email = models.CharField(
         'Email',
         max_length=254,
+        unique=True
     )
 
     confirmation_code = models.CharField(
@@ -38,6 +43,18 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
+
+    @property
+    def is_user(self):
+        return self.role == 'user'
+
+    @property
+    def is_admin(self):
+        return self.is_superuser or self.role == "admin" or self.is_staff
+
+    @property
+    def is_moder(self):
+        return self.role == 'moderator'
 
 
 class Category(models.Model):
