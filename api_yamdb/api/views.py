@@ -31,10 +31,18 @@ class UserRegistrationView(APIView):
 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
+        username = request.data.get('username')
+        email = request.data.get('email')
 
         if serializer.is_valid():
             serializer.save()
-            username = request.data.get('username')
+            confirmation_generator(username)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        elif User.objects.filter(username=username).exists() and User.objects.get(username=username).email == email:
             confirmation_generator(username)
             return Response(
                 serializer.data,
