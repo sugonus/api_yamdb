@@ -117,20 +117,6 @@ class TitleWriteSerializer(serializers.ModelSerializer):
         model = Title
 
 
-class ReadOnlyTitleSerializer(serializers.ModelSerializer):
-    rating = serializers.IntegerField(
-        source='reviews__score__avg', read_only=True
-    )
-    genres = GenreSerializer(many=True)
-    category = serializers.StringRelatedField(read_only=True)
-
-    class Meta:
-        model = Title
-        fields = (
-            'id', 'name', 'year', 'rating', 'description', 'genres', 'category'
-        )
-
-
 class CommentSerializer(serializers.ModelSerializer):
     review = serializers.SlugRelatedField(
         slug_field='text',

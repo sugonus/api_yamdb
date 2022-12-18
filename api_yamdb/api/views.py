@@ -11,14 +11,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .utils import confirmation_generator
 from reviews.models import User, Title, Category, Genre, Review
 from .mixins import MixinSet
-from .serializers import (CommentSerializer, ReviewSerializer,
+from .serializers import (CommentSerializer,
+                          ReviewSerializer,
                           RegistrationSerializer,
-                          AuthTokenSerializer, UserSerializer,
+                          AuthTokenSerializer,
+                          UserSerializer,
                           TitleSerializer,
                           TitleWriteSerializer,
                           CategorySerializer,
                           GenreSerializer)
-from .permissions import (IsAdminOrReadOnly, IsAdmin,
+from .permissions import (IsAdminOrReadOnly,
+                          IsAdmin,
                           IsAdminModeratorOwnerOrReadOnly, 
                           IsAdminUserOrReadOnly)
 
