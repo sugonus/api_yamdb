@@ -114,6 +114,7 @@ class Test04TitleAPI:
         )
 
         title_genres = title.get('genre', [])
+        print(title_genres)
         assert genres[0] in title_genres and genres[1] in title_genres, (
             'Проверьте, что при GET-запросе неавторизованного '
             f'пользователя к `{url}` в ответе содержится список жанров '

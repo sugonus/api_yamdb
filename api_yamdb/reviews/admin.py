@@ -5,7 +5,7 @@ from .models import Title, Category, Genre, User, GenreTitle, Comment, Review
 
 
 class GenreTitleInline(admin.TabularInline):
-    model = Title.genres.through
+    model = Title.genre.through
 
 
 class TitleResource(resources.ModelResource):
