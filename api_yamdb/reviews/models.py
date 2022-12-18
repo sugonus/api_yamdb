@@ -52,6 +52,9 @@ class User(AbstractUser):
     def is_moder(self):
         return self.role == 'moderator'
 
+    class Meta:
+        ordering = ['role']
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128)
