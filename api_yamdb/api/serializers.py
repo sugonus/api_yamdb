@@ -33,7 +33,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ('username',
@@ -45,7 +44,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ('username', 'email')
@@ -76,7 +74,6 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ('name', 'slug')
-        fields = ('name', 'slug')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -84,7 +81,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('name', 'slug')
         fields = ('name', 'slug')
 
 
@@ -104,14 +100,16 @@ class TitleSerializer(serializers.ModelSerializer):
 
 
 class TitleWriteSerializer(serializers.ModelSerializer):
+    """Основной метод записи информации."""
+
     category = serializers.SlugRelatedField(
-        queryset=Category.objects.all(),
-        slug_field='slug'
+        slug_field='slug', many=False, queryset=Category.objects.all()
     )
-    genre = serializers.SlugRelatedField(
-        queryset=Genre.objects.all(),
+    genres = serializers.SlugRelatedField(
         slug_field='slug',
-        many=True
+        many=True,
+        required=False,
+        queryset=Genre.objects.all()
     )
 
     class Meta:

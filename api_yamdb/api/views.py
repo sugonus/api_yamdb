@@ -15,7 +15,7 @@ from .serializers import (CommentSerializer, ReviewSerializer,
                           RegistrationSerializer,
                           AuthTokenSerializer, UserSerializer,
                           TitleSerializer,
-                          # TitleWriteSerializer, ReadOnlyTitleSerializer,
+                          TitleWriteSerializer,
                           CategorySerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly, IsAdmin,
@@ -108,10 +108,10 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
 
-    # def get_serializer_class(self):
-    #     if self.action in ("retrieve", "list"):
-    #         return TitleSerializer
-    #     return TitleSerializer
+    def get_serializer_class(self):
+        if self.action in ("retrieve", "list"):
+            return TitleSerializer
+        return TitleWriteSerializer
 
 
 class CategoryViewSet(MixinSet):
@@ -142,7 +142,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title = get_object_or_404(Title, pk=self.kwargs.get("title_id"))
-
         return title.reviews.all()
 
     def perform_create(self, serializer):
