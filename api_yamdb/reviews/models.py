@@ -6,6 +6,7 @@ from .validators import validate_year
 
 
 class User(AbstractUser):
+    id = models.AutoField(primary_key=True)
     USER = 'user'
     MODERATOR = 'moderator'
     ADMIN = 'admin'
@@ -67,8 +68,8 @@ class User(AbstractUser):
         return self.username
 
 
-
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
 
@@ -77,6 +78,7 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, null=True)
 
@@ -85,6 +87,7 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
     description = models.TextField(null=True)
     category = models.ForeignKey(
@@ -111,6 +114,7 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
+    id = models.AutoField(primary_key=True)
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE,
                                  db_column='genre_id')
     title_id = models.ForeignKey(Title, on_delete=models.CASCADE,
@@ -124,6 +128,7 @@ class Review(models.Model):
     """
     Модель Отзывы
     """
+    id = models.AutoField(primary_key=True)
     title = models.ForeignKey(
         Title,
         verbose_name='Произведение',
@@ -167,6 +172,7 @@ class Comment(models.Model):
     """
     Модель Комментарии
     """
+    id = models.AutoField(primary_key=True)
     review = models.ForeignKey(
         Review,
         verbose_name='Отзыв',

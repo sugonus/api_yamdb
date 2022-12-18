@@ -94,6 +94,7 @@ class UserAdmin(ImportExportModelAdmin):
     list_display = (
         'id',
         'username',
+        'role',
         'email',
     )
 
