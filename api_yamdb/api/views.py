@@ -133,10 +133,6 @@ class GenreViewSet(MixinSet):
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
-    permission_classes = (IsAdminUserOrReadOnly,)
-    filter_backends = (SearchFilter,)
-    search_fields = ('name',)
-    lookup_field = 'slug'
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
