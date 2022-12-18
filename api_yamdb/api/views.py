@@ -22,7 +22,7 @@ from .serializers import (CommentSerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly,
                           IsAdmin,
-                          IsAdminModeratorOwnerOrReadOnly, 
+                          IsAdminModeratorOwnerOrReadOnly,
                           IsAdminUserOrReadOnly)
 
 
@@ -42,7 +42,8 @@ class UserRegistrationView(APIView):
                 status=status.HTTP_200_OK
             )
 
-        elif User.objects.filter(username=username).exists() and User.objects.get(username=username).email == email:
+        elif (User.objects.filter(username=username).exists()
+              and User.objects.get(username=username).email == email):
             confirmation_generator(username)
             return Response(
                 serializer.data,
