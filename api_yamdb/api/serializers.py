@@ -88,7 +88,7 @@ class TitleSerializer(serializers.ModelSerializer):
     """Произведения, описание."""
 
     genres = GenreSerializer(read_only=True, many=True)
-    category = serializers.StringRelatedField(read_only=True)
+    category = CategorySerializer(read_only=True)
     rating = serializers.IntegerField(
         source='reviews__score__avg', read_only=True
     )

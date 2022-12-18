@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
 from .validators import validate_year
 
 
@@ -33,6 +34,11 @@ class User(AbstractUser):
         unique=True
     )
 
+    password = models.CharField(
+        blank=True,
+        max_length=128
+    )
+
     confirmation_code = models.CharField(
         'Код',
         max_length=15,
@@ -53,7 +59,13 @@ class User(AbstractUser):
         return self.role == 'moderator'
 
     class Meta:
-        ordering = ['role']
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        ordering = ('role',)
+
+    def __str__(self):
+        return self.username
+
 
 
 class Category(models.Model):

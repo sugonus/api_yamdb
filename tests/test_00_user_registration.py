@@ -344,8 +344,8 @@ class Test00UserRegistration:
             f'на эндпоинт `{self.url_signup}`, возвращает ответ со статусом '
             '200.'
         )
-
         response = client.post(self.url_signup, data=valid_data)
+        print(response)
         assert response.status_code == HTTPStatus.OK, (
             f'Проверьте, что повторный POST-запрос к `{self.url_signup}` с '
             'данными зарегистрированного пользователя возвращает ответ со '
