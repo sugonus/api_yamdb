@@ -108,12 +108,12 @@ class TitleWriteSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
         slug_field='slug',
         many=True,
-        required=False,
+        required=True,
         queryset=Genre.objects.all()
     )
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'name', 'year', 'description', 'genre', 'category',)
         model = Title
 
 
