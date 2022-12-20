@@ -16,14 +16,14 @@ from .serializers import (CommentSerializer,
                           RegistrationSerializer,
                           AuthTokenSerializer,
                           UserSerializer,
-                          TitleSerializer,
+                          TitleReadSerializer,
                           TitleWriteSerializer,
                           CategorySerializer,
                           GenreSerializer)
 from .permissions import (IsAdminOrReadOnly,
                           IsAdmin,
-                          IsAdminModeratorOwnerOrReadOnly, 
-                          IsAdminUserOrReadOnly)
+                          IsAdminModeratorOwnerOrReadOnly,
+                          )
 
 
 class UserRegistrationView(APIView):
@@ -112,16 +112,15 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
-    queryset = Title.objects.all().annotate(
-        Avg('reviews__score')
-    ).order_by('name')
+    queryset = Title.objects.annotate(
+        rating=Avg('reviews__score')).order_by('name')
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.action in ('retrieve', 'list'):
-            return TitleSerializer
+            return TitleReadSerializer
         return TitleWriteSerializer
 
 
@@ -137,7 +136,7 @@ class CategoryViewSet(MixinSet):
 class GenreViewSet(MixinSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminUserOrReadOnly,)
+    permission_classes = (IsAdminOrReadOnly,) # Заменил пермишен
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'
@@ -159,7 +158,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = (IsAdminModeratorOwnerOrReadOnly,)
+    permission_classes = [IsAdminModeratorOwnerOrReadOnly]
 
     def get_queryset(self):
         review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))

@@ -1,6 +1,9 @@
 import os
+
 from datetime import timedelta
 from pathlib import Path
+from django.conf.global_settings import DATETIME_INPUT_FORMATS
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -127,10 +130,14 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=100),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+DATETIME_INPUT_FORMATS += (
+    '%Y-%m-%dT%H:%M:%S.567Z',
+    '%Y-%m-%dT%H:%M:%S.422z',
+)
 
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')

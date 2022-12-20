@@ -2,11 +2,12 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 from .validators import validate_year
 
 
 class User(AbstractUser):
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     USER = 'user'
     MODERATOR = 'moderator'
     ADMIN = 'admin'
@@ -69,7 +70,7 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
 
@@ -78,7 +79,7 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, null=True)
 
@@ -87,7 +88,7 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     name = models.CharField(max_length=128)
     description = models.TextField(null=True)
     category = models.ForeignKey(
@@ -114,7 +115,7 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE,
                                  db_column='genre_id')
     title_id = models.ForeignKey(Title, on_delete=models.CASCADE,
@@ -128,12 +129,13 @@ class Review(models.Model):
     """
     Модель Отзывы
     """
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     title = models.ForeignKey(
         Title,
         verbose_name='Произведение',
         on_delete=models.CASCADE,
-        related_name='reviews'
+        related_name='reviews',
+        db_column='title_id',
     )
     text = models.TextField(
         verbose_name='Текст',
@@ -146,6 +148,7 @@ class Review(models.Model):
     )
     score = models.PositiveSmallIntegerField(
         verbose_name='Рейтинг',
+        default=1,
         validators=[
             MinValueValidator(1, 'Допустимы значения от 1 до 10'),
             MaxValueValidator(10, 'Допустимы значения от 1 до 10')
@@ -172,12 +175,13 @@ class Comment(models.Model):
     """
     Модель Комментарии
     """
-    id = models.AutoField(primary_key=True)
+    # Убрано 'id'
     review = models.ForeignKey(
         Review,
         verbose_name='Отзыв',
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='comments',
+        db_column='review_id',
     )
     text = models.TextField(
         verbose_name='Текст',

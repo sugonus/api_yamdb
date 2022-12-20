@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers  # убран лишний импорт
 from re import match
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
@@ -84,14 +84,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('name', 'slug')
 
 
-class TitleSerializer(serializers.ModelSerializer):
+class TitleReadSerializer(serializers.ModelSerializer): # Serializator renamed
     """Произведения, описание."""
 
     genre = GenreSerializer(read_only=True, many=True)
     category = CategorySerializer(read_only=True)
-    rating = serializers.IntegerField(
-        source='reviews__score__avg', read_only=True
-    )
+    rating = serializers.IntegerField(read_only=True) # Убран подсчет
 
     class Meta:
         model = Title

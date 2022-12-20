@@ -47,6 +47,12 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+Импортировать базу данных из csv-файла:
+
+```
+python import_csv.py
+```
+
 Запустить проект:
 
 ```
