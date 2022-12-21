@@ -6,7 +6,6 @@ from .validators import validate_year
 
 
 class Category(models.Model):
-    # Убрано 'id'
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True)
 
@@ -15,7 +14,6 @@ class Category(models.Model):
 
 
 class Genre(models.Model):
-    # Убрано 'id'
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, null=True)
 
@@ -24,7 +22,6 @@ class Genre(models.Model):
 
 
 class Title(models.Model):
-    # Убрано 'id'
     name = models.CharField(max_length=128)
     description = models.TextField(null=True)
     category = models.ForeignKey(
@@ -51,7 +48,6 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    # Убрано 'id'
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE,
                                  db_column='genre_id')
     title_id = models.ForeignKey(Title, on_delete=models.CASCADE,
@@ -65,7 +61,6 @@ class Review(models.Model):
     """
     Модель Отзывы
     """
-    # Убрано 'id'
     title = models.ForeignKey(
         Title,
         verbose_name='Произведение',
@@ -111,7 +106,6 @@ class Comment(models.Model):
     """
     Модель Комментарии
     """
-    # Убрано 'id'
     review = models.ForeignKey(
         Review,
         verbose_name='Отзыв',

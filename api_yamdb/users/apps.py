@@ -1,1 +1,0 @@
-print(len('bgsclf-d18811ffca6209e116b7c3e19feb1bc4'))
