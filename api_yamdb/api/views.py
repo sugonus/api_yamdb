@@ -1,6 +1,7 @@
 from rest_framework import status, viewsets, permissions, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Avg
 from rest_framework.decorators import action
 from api.filters import TitleFilter
@@ -21,9 +22,10 @@ from .serializers import (CommentSerializer,
                           TitleWriteSerializer,
                           CategorySerializer,
                           GenreSerializer)
-from .permissions import (IsAdminOrReadOnly,
-                          IsAdmin,
-                          IsAdminModeratorOwnerOrReadOnly,
+from .permissions import (IsAdmin,
+                          IsAuthor,
+                          IsModerator,
+                          IsAdminOrReadOnly,
                           )
 
 
@@ -145,7 +147,8 @@ class GenreViewSet(MixinSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAdminModeratorOwnerOrReadOnly]
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          IsAuthor | IsModerator | IsAdminOrReadOnly)
 
     def get_queryset(self):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
@@ -159,7 +162,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAdminModeratorOwnerOrReadOnly]
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          IsAuthor | IsModerator | IsAdminOrReadOnly)
 
     def get_queryset(self):
         review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
