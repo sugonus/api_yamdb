@@ -1,6 +1,1 @@
-from django.apps import AppConfig
-
-
-class UsersConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'users'
+print(len('bgsclf-d18811ffca6209e116b7c3e19feb1bc4'))

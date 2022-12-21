@@ -1,18 +1,13 @@
-from random import choice
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.tokens import default_token_generator
 from reviews.models import User
 from django.core.mail import send_mail
-import string
 
 
-def confirmation_generator(username):
+def get_confirmation_code_and_send_email(username):
     """Генерация и отправка подтверждения."""
-
-    confirmation_code = ''
-    for _ in range(15):
-        confirmation_code += choice(string.ascii_letters + string.digits)
-
     user = get_object_or_404(User, username=username)
+    confirmation_code = default_token_generator.make_token(user)
     user.confirmation_code = confirmation_code
     user.save()
     send_mail(

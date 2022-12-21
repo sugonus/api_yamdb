@@ -54,15 +54,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
             return value
         raise serializers.ValidationError('Некорректный username')
 
-    def validate_email(self, value):
-        if match(r'[\w]+@[\w]+\.[\w]+', value):
-            return value
-        raise serializers.ValidationError('Некорректный email')
-
 
 class AuthTokenSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=50)
-    confirmation_code = serializers.CharField(max_length=15)
+    confirmation_code = serializers.CharField(max_length=50)
 
     class Meta:
         model = User

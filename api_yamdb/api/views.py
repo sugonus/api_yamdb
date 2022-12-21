@@ -8,7 +8,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from .utils import confirmation_generator
+from .utils import get_confirmation_code_and_send_email
 from reviews.models import Title, Category, Genre, Review
 from users.models import User
 from .mixins import MixinSet
@@ -37,14 +37,14 @@ class UserRegistrationView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            confirmation_generator(username)
+            get_confirmation_code_and_send_email(username)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
             )
 
         elif User.objects.filter(username=username, email=email):
-            confirmation_generator(username)
+            get_confirmation_code_and_send_email(username)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK

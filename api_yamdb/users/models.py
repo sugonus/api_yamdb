@@ -3,15 +3,10 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    USER = 'user'
-    MODERATOR = 'moderator'
-    ADMIN = 'admin'
-
-    ROLES = (
-        (USER, 'Пользователь'),
-        (MODERATOR, 'Модератор'),
-        (ADMIN, 'Администратор')
-    )
+    class Role(models.TextChoices):
+        USER = "user", "Пользователь"
+        MODERATOR = "moderator", "Модератор"
+        ADMIN = "admin", "Администратор"
 
     bio = models.TextField(
         'Биография',
@@ -21,30 +16,25 @@ class User(AbstractUser):
     role = models.CharField(
         'Роль',
         max_length=10,
-        choices=ROLES,
-        default=USER
+        choices=Role.choices,
+        default=Role.USER
     )
 
-    email = models.CharField(
+    email = models.EmailField(
         'Email',
         max_length=254,
         unique=True
     )
 
-    password = models.CharField(
-        blank=True,
-        max_length=128
-    )
-
     confirmation_code = models.CharField(
         'Код',
-        max_length=15,
+        max_length=50,
         blank=True,
         null=True
     )
 
     @property
-    def is_user(self):
+    def is_simple_user(self):
         return self.role == 'user'
 
     @property
@@ -52,7 +42,7 @@ class User(AbstractUser):
         return self.is_superuser or self.role == "admin" or self.is_staff
 
     @property
-    def is_moder(self):
+    def is_moderator(self):
         return self.role == 'moderator'
 
     class Meta:
