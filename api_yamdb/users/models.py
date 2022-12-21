@@ -35,15 +35,16 @@ class User(AbstractUser):
 
     @property
     def is_simple_user(self):
-        return self.role == 'user'
+        return self.role == self.Role.USER
 
     @property
     def is_admin(self):
-        return self.is_superuser or self.role == "admin" or self.is_staff
+        return (self.is_superuser
+                or self.role == self.Role.ADMIN or self.is_staff)
 
     @property
     def is_moderator(self):
-        return self.role == 'moderator'
+        return self.role == self.Role.MODERATOR
 
     class Meta:
         verbose_name = 'Пользователь'
