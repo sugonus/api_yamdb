@@ -9,7 +9,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from .utils import confirmation_generator
-from reviews.models import User, Title, Category, Genre, Review
+from reviews.models import Title, Category, Genre, Review
+from users.models import User
 from .mixins import MixinSet
 from .serializers import (CommentSerializer,
                           ReviewSerializer,
@@ -42,7 +43,7 @@ class UserRegistrationView(APIView):
                 status=status.HTTP_200_OK
             )
 
-        elif User.objects.filter(username=username).exists() and User.objects.get(username=username).email == email:
+        elif User.objects.filter(username=username, email=email):
             confirmation_generator(username)
             return Response(
                 serializer.data,
@@ -136,7 +137,7 @@ class CategoryViewSet(MixinSet):
 class GenreViewSet(MixinSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = (IsAdminOrReadOnly,) # Заменил пермишен
+    permission_classes = (IsAdminOrReadOnly,)  # Заменил пермишен
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
     lookup_field = 'slug'

@@ -1,9 +1,11 @@
 from django.contrib import admin
-from .models import Title, Category, Genre, User, GenreTitle, Comment, Review
+from .models import Title, Category, Genre, GenreTitle, Comment, Review
+from users.models import User
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'role', 'bio', 'first_name', 'last_name')
+    list_display = ('id', 'username', 'email',
+                    'role', 'bio', 'first_name', 'last_name')
 
 
 class ReviewAdmin(admin.ModelAdmin):

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'djoser',
+    'users',
     'reviews',
     'api',
     'import_export',
@@ -114,7 +115,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
-AUTH_USER_MODEL = 'reviews.User'
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
