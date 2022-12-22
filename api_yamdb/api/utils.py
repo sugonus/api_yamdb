@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import default_token_generator
 from reviews.models import User
 from django.core.mail import send_mail
+from api_yamdb.settings import OUR_EMAIL
 
 
 def get_confirmation_code_and_send_email(username):
@@ -13,7 +14,7 @@ def get_confirmation_code_and_send_email(username):
     send_mail(
         'Подтверждение',
         confirmation_code,
-        'yamdb@yandex.ru',
+        OUR_EMAIL,
         [user.email, ],
         fail_silently=False
     )

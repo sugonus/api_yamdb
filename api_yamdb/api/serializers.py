@@ -1,5 +1,4 @@
-from rest_framework import serializers  # убран лишний импорт
-from re import match
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from reviews.models import Title, Category, Genre, Comment, Review
@@ -47,11 +46,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email')
-
-    def validate_username(self, value):
-        if value != 'me' and match(r'[\w]', value):
-            return value
-        raise serializers.ValidationError('Некорректный username')
 
 
 class AuthTokenSerializer(serializers.ModelSerializer):
